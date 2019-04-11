@@ -1,37 +1,49 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
 import './App.css';
 
 class App extends Component {
   constructor(props){
     super(props);
-
-    this.state = {message: "Light"}; //state
-    this.updateMessage = this.updateMessage.bind(this);
-    this.back = {
-      color : "Light",
+    //default
+    this.state = {
+      // active : "light",
+      theme : "Light",
+      color : "white"
     };
   }
-
-  updateMessage(){
-    this.setState({
-      message: "Dark" //changed state
-    });
-  }
   clicked(menu){
-    //untuk memperbarui state sesuai dengan menu yang dipilih
     this.setState({
-      color : menu.color,
+      // active: menu,
+      theme : menu.theme,
+      color : menu.color
     });
   }
   render() {
     return (
-      <div id="app">
-        {/* map akan loop sebanyak menu yang didefinisikan*/}
-        {/* kemudian mengembalikan elemen <a/> */}
-        <h1>Theme {this.state.message}!</h1>
-              <button onClick={this.updateMessage}>Ganti tema</button>
+      <div className={"bg "+this.state.color}>
+        <nav>
+        {this.props.items.map((menu,index) => {
+            var style = 'menu';
+
+            //penamaan state color tidak harus sesuai pada menu.
+            if(this.state.color === menu.color){
+              style = `${style} is-active`;
+            }
+
+            return <a
+              className = {style+" "+menu.color}
+              onClick = {this.clicked.bind(this,menu)}
+              key = {index}
+            >
+              {menu.theme}
+            </a>;
+          }
+        )}
+        </nav>
+        <div className = "info">
+          theme <span className = {"selected "+this.state.color}>{this.state.theme}</span><br/><br/>
         </div>
+      </div>
     );
   }
 }
